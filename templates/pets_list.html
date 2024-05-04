@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Pets List
+{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes list-unstyled">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<div class="container pb-5">
+   <h1 class="display-1">Pets</h1>
+    <section class="row">
+        {% for pet in pets %}
+        <article class="col-4-auto p-2">
+            <a href="/pets/{{pet.id}}">
+              <img src={{pet.photo_url}} alt={{pet.name}}>
+            </a>
+            <h2>{{pet.name}}</h2>
+            {% if pet.available %}
+            <p>
+                <span class="text-success">{{pet.name}}</span> is 
+                <span class="font-weight-bold">available!</span>
+            </p>
+            {% else %}
+            <p>
+                {{pet.name}} is no longer available.  
+            </p>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </section>
+
+    <a href="/add_pet" class="btn btn-success">Add a Pet</a>
+</div>
+
+{% endblock %}

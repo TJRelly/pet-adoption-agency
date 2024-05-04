@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Pet Details
+{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes list-unstyled">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+
+<div class="container pb-5">
+    <h1 class="display-1 mx-n3">{{pet.name}}</h1>
+    <section class="row">
+        <section class="p-2 pr-5">
+            <img src={{pet.photo_url}} alt={{pet.name}} class="pet-detail d-block">
+        </section>
+
+        <article class="lead pr-5 pt-4">
+            <h2>{{pet.name}}</h2>
+            <p>species: {{pet.species}}</p>
+            <p>age: {{pet.age or "unknown"}}</p>
+            <p>{{pet.notes}}</p>
+            {% if pet.available %}
+            <p>
+                <span class="text-success">{{pet.name}}</span> is 
+                <span class="font-weight-bold"> available!</span>
+            </p>
+            {% else %}
+            <p>
+                {{pet.name}} is no longer available.  
+            </p>
+            {% endif %}
+
+        </article>
+
+        <section class="col-8 pt-4 ml-n3">
+            <h2>Edit {{pet.name}}</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }} <!--add type=hidden form fields -->
+              
+                {% for field in form
+                       if field.widget.input_type != 'hidden' %}
+
+                    {% if field.name == "available" %}
+
+                       <div class="form-group">
+                           {{ field.label(class_ = "lead") }}
+                           {{ field(class_ = "form-check-label")}}
+                     
+                           {% for error in field.errors %}
+                               <small class="form-text text-danger">
+                                   {{ error }}
+                               </small>  
+                           {% endfor %}
+                         </div>
+       
+                    {% else %}
+              
+                        <div class="form-group">
+                            {{ field.label}}
+                            {{ field(class_ = "form-control")}}
+                    
+                            {% for error in field.errors %}
+                                <small class="form-text text-danger">
+                                    {{ error }}
+                                </small>  
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+              
+                <button type="submit" class="btn btn-success">Save</button>  
+                <a href="/" class="lead d-block py-3">Back to pets</a>
+            </form>
+        </section>
+    </section>
+
+</div>
+
+{% endblock %}
